@@ -51,7 +51,7 @@
             <field name="help">Define the roles for stakeholders in projects.</field>
         </record>
 
-        <!--<menuitem id="menu_roles_config" name="Roles" parent="base.menu_definitions" sequence="1"/>-->
+        <!--<menuitem id="menu_roles_config" name="Roles" parent="project.menu_main_pm" sequence="1"/>-->
         <menuitem action="action_project_hr_role_tree"
 			name="Roles"
 			id="menu_project_hr_role_view"
