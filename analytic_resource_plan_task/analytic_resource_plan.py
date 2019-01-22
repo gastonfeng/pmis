@@ -19,11 +19,11 @@
 #
 ##############################################################################
 
-from openerp.tools.translate import _
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 
-class analytic_resource_plan_line(osv.osv):
+class analytic_resource_plan_line(models.Model):
 
     _inherit = 'analytic.resource.plan.line'
 

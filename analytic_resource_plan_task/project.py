@@ -18,10 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv
 
 
-class project(osv.osv):
+class project(models.Model):
     _inherit = "project.project"
 
     def write(self, cr, uid, ids, vals, context=None):

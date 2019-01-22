@@ -13,7 +13,7 @@
             		<field name="milestone"/>            		  
             	</field>
 
-	            <xpath expr="//sheet//page[@string='Extra Info']//notebook[@name='Scheduling']" position="inside">
+                <xpath expr="//sheet//page[@name='Extra Info']//notebook[@name='Scheduling']" position="inside">
 					<page  string="Milestone" attrs="{'readonly':[('milestone','=',False)]}">
 						<group colspan="2" col="2">    
 							<field name="public_milestone"/>                          
@@ -50,8 +50,9 @@
             <field name="model">project.project</field>
             <field name="type">form</field>
             <field name="inherit_id" ref="project_charter.view_project_form"/>
-            <field name="arch" type="xml">                
-            	<xpath expr='//form/sheet/notebook/page/notebook/page[@string="Requirements and Success"]' position="after">
+            <field name="arch" type="xml">
+                <xpath expr='//form/sheet/notebook/page/notebook/page[@name="Requirements and Success"]'
+                       position="after">
 	            	<page string="Milestones">
 	                        <field colspan="4" name="milestones" nolabel="1"  mode="tree" context="{'default_project_id': active_id}">
 	                            <tree string="Milestones">

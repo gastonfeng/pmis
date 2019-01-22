@@ -18,11 +18,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import time
-from openerp.osv import fields, osv, orm
 
 
-class stock_move(osv.osv):
+class stock_move(models.Model):
 
     _inherit = "stock.move"
 

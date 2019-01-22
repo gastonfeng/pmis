@@ -18,30 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-from openerp.osv import fields, osv
 
-
-class sale_order_line(osv.osv):
+class sale_order_line(models.Model):
 
     _inherit = "sale.order.line"
 
-    _columns = {
-        'project_id': fields.related(
-            'order_id', 'project_id',
-            type='many2one',
-            relation='account.analytic.account',
-            string='Analytic Account',
-            readonly=True
-        ),
-
-        'project_user_id': fields.related(
-            'order_id', 'project_user_id',
-            type='many2one',
-            relation='res.users',
-            string='Project Manager',
-            readonly=True
-        ),
-    }
-
-sale_order_line()
+    project_id = fields.Many2one(related='order_id.project_id', type='many2one', relation='account.analytic.account',
+                                 string='Analytic Account', readonly=True)
+    project_user_id = fields.Many2one(related='order_id.project_user_id', type='many2one', relation='res.users',
+                                      string='Project Manager', readonly=True)

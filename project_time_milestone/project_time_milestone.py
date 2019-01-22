@@ -20,10 +20,10 @@
 ##############################################################################
 
 
-from openerp.osv import fields, osv
+from openerp.osv import fields
 
 
-class task(osv.osv):
+class task(models.Model):
     _inherit = 'project.task'
 
     _columns = {
@@ -54,7 +54,7 @@ milestone
 task()
 
 
-class project(osv.osv):
+class project(models.Model):
 
     _inherit = "project.project"
 

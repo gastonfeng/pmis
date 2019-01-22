@@ -18,23 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-from openerp.osv import fields, osv
 
-
-class account_invoice_line(osv.osv):
+class account_invoice_line(models.Model):
 
     _inherit = "account.invoice.line"
 
-    _columns = {
-        'account_analytic_user_id': fields.related(
-            'account_analytic_id',
-            'user_id',
-            type='many2one',
-            relation='res.users',
-            string='Project Manager',
-            store=True,
-            readonly=True),
-    }
-
-account_invoice_line()
+    account_analytic_user_id = fields.Many2one(related='account_analytic_id.user_id', type='many2one',
+                                               relation='res.users', string='Project Manager', store=True,
+                                               readonly=True)

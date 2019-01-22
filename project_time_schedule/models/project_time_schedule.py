@@ -19,20 +19,21 @@
 #
 ##############################################################################
 
-from datetime import datetime, date, timedelta
-from openerp.tools.translate import _
-from openerp.osv import fields, osv
-from dijkstra import shortestPath
-from itertools import count
-from dateutil.rrule import rrule
-from dateutil.rrule import DAILY, MO, TU, WE, TH, FR, HOURLY
 import logging
+from datetime import datetime, date, timedelta
+from itertools import count
 
+from dateutil.rrule import DAILY, MO, TU, WE, TH, FR, HOURLY
+from dateutil.rrule import rrule
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
+
+from dijkstra import shortestPath
 
 _logger = logging.getLogger(__name__)
 
 
-class task(osv.osv):
+class task(models.Model):
     _inherit = 'project.task'
     _description = "Activity"
 

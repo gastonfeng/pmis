@@ -13,7 +13,8 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="project_charter.view_project_form"/>
             <field name="arch" type="xml">
-            	<xpath expr='//form/sheet/notebook/page/notebook/page[@string="Requirements and Success"]' position="before">
+                <xpath expr='//form/sheet/notebook/page/notebook/page[@name="Requirements and Success"]'
+                       position="before">
 					<page groups="base.group_erp_manager" string="Stakeholders">
 						<group string="Project Stakeholders">
 							<button help="Project Stakeholders"

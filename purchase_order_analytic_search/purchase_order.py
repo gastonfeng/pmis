@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+from openerp.osv import fields
 
 
-class purchase_order(osv.osv):
+class purchase_order(models.Model):
 
     _inherit = "purchase.order"
 

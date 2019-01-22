@@ -18,12 +18,12 @@ class ConvertNoteChange(osv.TransientModel):
         ),
     }
 
-    def create_change(self, cr, uid, ids, context=None):
-        wizard = self.browse(cr, uid, ids, context=context)
+    def create_change(self, ids, context=None):
+        wizard = self.browse(ids, context=context)
         change_obj = self.pool('change.management.change')
         note_obj = self.pool('note.note')
         note_brw = note_obj.browse(
-            cr, uid, [context.get('active_id')], context=context)
+            [context.get('active_id')], context=context)
         attachment_obj = self.pool['ir.attachment']
 
         vals = {
@@ -34,23 +34,23 @@ class ConvertNoteChange(osv.TransientModel):
             "change_category_id": wizard.change_category_id.id
         }
 
-        change_id = change_obj.create(cr, uid, vals, context=context)
+        change_id = change_obj.create(vals, context=context)
 
         # Archive the note
-        note_obj.write(cr, uid, [context.get('active_id')], {
+        note_obj.write([context.get('active_id')], {
             'open': False,
         })
         obj_model = self.pool.get('ir.model.data')
 
         # return the action to go to the form view of the new CR
         model_data_ids = obj_model.search(
-            cr, uid, [
+            [
                 ('model', '=', 'ir.ui.view'),
                 ('name', '=', 'change_form_view')
             ]
         )
         resource_id = obj_model.read(
-            cr, uid, model_data_ids,
+            model_data_ids,
             fields=['res_id']
         )[0]['res_id']
 

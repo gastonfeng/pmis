@@ -19,18 +19,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from datetime import datetime, timedelta
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP
 from openerp.tools import float_compare
-from dateutil.relativedelta import relativedelta
-from openerp.osv import fields, osv
-from openerp import netsvc
-from openerp.tools.translate import _
-import pytz
 from openerp import SUPERUSER_ID
 
 
-class sale_order(osv.osv):
+class sale_order(models.Model):
     _inherit = "sale.order"
 
     def _prepare_order_line_move(self, cr, uid, order, line, picking_id, date_planned, context=None):
