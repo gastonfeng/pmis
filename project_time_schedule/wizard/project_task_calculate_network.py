@@ -33,12 +33,12 @@ class project_task_calculate_network(osv.osv_memory):
         'task_id': fields.many2one('project.task', 'Target task'),
     }
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self,  fields, context=None):
         """
         This function gets default values
         """
         res = super(project_task_calculate_network, self).default_get(
-            cr, uid, fields, context=context)
+             fields, context=context)
         if context is None:
             context = {}
         record_id = context and context.get('active_id', False) or False
@@ -46,12 +46,12 @@ class project_task_calculate_network(osv.osv_memory):
         res.update({'task_id': record_id})
         return res
 
-    def calculate_network(self, cr, uid, ids, context=None):
+    def calculate_network(self,  ids, context=None):
         if context is None:
             context = {}
         task_id = context.get('active_id', False)
         task_pool = self.pool.get('project.task')
-        task_pool.calculate_network(cr, uid, [task_id], context=context)
+        task_pool.calculate_network( [task_id], context=context)
 
         return {'type': 'ir.actions.act_window_close'}
 

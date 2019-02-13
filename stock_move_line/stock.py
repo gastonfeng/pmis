@@ -25,7 +25,7 @@ class stock_move(models.Model):
     _inherit = "stock.move"
 
     def _create_account_move_line(
-        self, cr, uid, move, src_account_id, dest_account_id, reference_amount,
+        self,  move, src_account_id, dest_account_id, reference_amount,
         reference_currency_id, context=None
     ):
         """
@@ -36,7 +36,7 @@ class stock_move(models.Model):
             context = {}
 
         res = super(stock_move, self)._create_account_move_line(
-            cr, uid, move, src_account_id, dest_account_id,
+             move, src_account_id, dest_account_id,
             reference_amount, reference_currency_id, context=None
         )
         debit_line_vals = res[0][2]
@@ -44,7 +44,7 @@ class stock_move(models.Model):
 
         account_obj = self.pool.get('account.account')
         src_acct, dest_acct = account_obj.browse(
-            cr, uid, [credit_line_vals['account_id'], debit_line_vals['account_id']], context=context
+             [credit_line_vals['account_id'], debit_line_vals['account_id']], context=context
         )
 
         debit_analytic_account_id = False

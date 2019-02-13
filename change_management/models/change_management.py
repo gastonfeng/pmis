@@ -42,35 +42,35 @@ class CMChange(models.Model):
     _track = {
         'state': {
             'change_management.mt_change_draft': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['draft']
             ),
             'change_management.mt_change_active': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['active']
             ),
             'change_management.mt_change_accepted': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['accepted']
             ),
             'change_management.mt_change_in_progress': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['in_progress']
             ),
             'change_management.mt_change_done': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['done']
             ),
             'change_management.mt_change_rejected': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['rejected']
             ),
             'change_management.mt_change_withdrawn': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['withdrawn']
             ),
             'change_management.mt_change_deferred': (
-                lambda self, cr, uid, obj,
+                lambda self,  obj,
                 ctx=None: obj['state'] in ['deferred']
             )
         }

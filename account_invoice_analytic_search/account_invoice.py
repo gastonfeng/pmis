@@ -49,24 +49,24 @@ class account_invoice(models.Model):
                             invoice_line.account_analytic_id.user_id.id)
         return res
 
-    def _search_analytic_accounts(self, cr, uid, obj, name, args, context):
+    def _search_analytic_accounts(self,  obj, name, args, context):
 
         invoice_line_obj = self.pool.get('account.invoice.line')
         res = []
         for field, operator, value in args:
             assert field == name
             invoice_line_ids = invoice_line_obj.search(
-                cr, uid, [('account_analytic_id', operator, value)])
+                 [('account_analytic_id', operator, value)])
             invoice_ids = [invoice_line.invoice_id and
                            invoice_line.invoice_id.id for
                            invoice_line in
                            invoice_line_obj.browse(
-                            cr, uid, invoice_line_ids)
+                             invoice_line_ids)
                            ]
             res.append(('id', 'in', invoice_ids))
         return res
 
-    def _search_analytic_account_user_ids(self, cr, uid, obj, name, args,
+    def _search_analytic_account_user_ids(self,  obj, name, args,
                                           context):
 
         invoice_line_obj = self.pool.get('account.invoice.line')
@@ -74,12 +74,12 @@ class account_invoice(models.Model):
         for field, operator, value in args:
             assert field == name
             invoice_line_ids = invoice_line_obj.search(
-                cr, uid, [('account_analytic_user_id', operator, value)])
+                 [('account_analytic_user_id', operator, value)])
             invoice_ids = [invoice_line.invoice_id and
                            invoice_line.invoice_id.id for
                            invoice_line in
                            invoice_line_obj.browse(
-                            cr, uid, invoice_line_ids)
+                             invoice_line_ids)
                            ]
             res.append(('id', 'in', invoice_ids))
         return res

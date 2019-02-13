@@ -26,7 +26,7 @@ from openerp import SUPERUSER_ID
 class sale_order(models.Model):
     _inherit = "sale.order"
 
-    def _prepare_order_line_move(self, cr, uid, order, line, picking_id, date_planned, context=None):
+    def _prepare_order_line_move(self,  order, line, picking_id, date_planned, context=None):
         location_id = order.shop_id.warehouse_id.lot_stock_id.id
         output_id = order.shop_id.warehouse_id.lot_output_id.id
 

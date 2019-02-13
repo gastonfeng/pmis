@@ -90,7 +90,7 @@
             <field name="model">project.task</field>
             <field name="type">gantt</field>
             <field eval="2" name="priority"/>
-            <field name="inherit_id" ref="project.view_task_gantt"/>       
+            <field name="inherit_id" ref="project_gantt8.view_task_gantt"/>
             <field name="arch" type="xml">
                 <xpath expr="//gantt" position="replace">
                     <gantt date_start="date_early_start" date_stop="date_early_finish" progress="progress" string="Tasks" default_group_by="project_id">

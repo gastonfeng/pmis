@@ -39,7 +39,7 @@ class IrMail_Server(osv.Model):
                           "specified for outgoing emails (To/Cc/Bcc)")
 
     def send_email(
-        self, cr, uid, message, mail_server_id=None, smtp_server=None,
+        self,  message, mail_server_id=None, smtp_server=None,
         smtp_port=None, smtp_user=None, smtp_password=None,
         smtp_encryption=None, smtp_debug=False, context=None
     ):
@@ -51,7 +51,7 @@ class IrMail_Server(osv.Model):
         smtp_from = message['Return-Path']
         if not smtp_from:
             smtp_from = self._get_default_bounce_address(
-                cr, uid, context=context
+                 context=context
             )
         if not smtp_from:
             smtp_from = message['From']

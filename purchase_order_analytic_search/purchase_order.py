@@ -45,32 +45,32 @@ class purchase_order(models.Model):
                         res[purchase.id].append(po_line.account_analytic_id.user_id.id)
         return res
 
-    def _search_analytic_accounts(self, cr, uid, obj, name, args, context):
+    def _search_analytic_accounts(self,  obj, name, args, context):
 
         po_line_obj = self.pool.get('purchase.order.line')
         res = []
         for field, operator, value in args:
             assert field == name
-            po_line_ids = po_line_obj.search(cr, uid, [('account_analytic_id', operator, value)])
+            po_line_ids = po_line_obj.search( [('account_analytic_id', operator, value)])
             order_ids = [
                 po_line.order_id and po_line.order_id.id for po_line in po_line_obj.browse(
-                    cr, uid, po_line_ids
+                     po_line_ids
                 )
             ]
             res.append(('id', 'in', order_ids))
         return res
 
-    def _search_analytic_account_user_ids(self, cr, uid, obj, name, args, context):
+    def _search_analytic_account_user_ids(self,  obj, name, args, context):
 
         po_line_obj = self.pool.get('purchase.order.line')
         res = []
         for field, operator, value in args:
             assert field == name
             po_line_ids = po_line_obj.search(
-                cr, uid, [('account_analytic_user_id', operator, value)]
+                 [('account_analytic_user_id', operator, value)]
             )
             order_ids = [
-                po_line.order_id and po_line.order_id.id for po_line in po_line_obj.browse(cr, uid, po_line_ids)
+                po_line.order_id and po_line.order_id.id for po_line in po_line_obj.browse( po_line_ids)
             ]
             res.append(('id', 'in', order_ids))
         return res

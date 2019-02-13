@@ -58,8 +58,8 @@ class project(models.Model):
 
     _inherit = "project.project"
 
-    def _milestones_ids(self, cr, uid, ids, field_name, arg, context=None):
-        projects = self.browse(cr, uid, ids)
+    def _milestones_ids(self,  ids, field_name, arg, context=None):
+        projects = self.browse( ids)
         res = {}
         for project in projects:
             # get the related tasks
@@ -84,4 +84,4 @@ class project(models.Model):
     }
 
 
-project()
+

@@ -35,19 +35,19 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
             help='List of predecessor task id''s separated by comma'),
     }
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self,  fields, context=None):
         """
         This function gets default values
         """
         res = super(ProjectTaskLinkPredecessorsStr, self).default_get(
-            cr, uid, fields, context=context
+             fields, context=context
         )
         if context is None:
             context = {}
         record_id = context and context.get('active_id', False) or False
         task_pool = self.pool.get('project.task')
         task_data = []
-        task_data = task_pool.read(cr, uid, record_id, ['parent_ids'])
+        task_data = task_pool.read( record_id, ['parent_ids'])
         parent_ids = task_data['parent_ids']
         data = []
         if parent_ids:
@@ -62,13 +62,13 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
         res.update({'predecessor_ids_str': str_data})
         return res
 
-    def link_predecessors_str(self, cr, uid, ids, context=None):
+    def link_predecessors_str(self,  ids, context=None):
         if context is None:
             context = {}
         task_id = context.get('active_id', False)
         task_pool = self.pool.get('project.task')
         link_predecessors_data_str = self.read(
-            cr, uid, ids, context=context)[0]
+             ids, context=context)[0]
         pred_data_str = link_predecessors_data_str['predecessor_ids_str']
         try:
             link_predecessors_data = pred_data_str.split(',')
@@ -83,7 +83,7 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
 
         for pred_id in link_predecessors_data:
             try:
-                task_ids = task_pool.search(cr, uid, [('id', '=', pred_id)])
+                task_ids = task_pool.search( [('id', '=', pred_id)])
             except:
                 raise orm.except_orm(
                     _('Error!'),
@@ -96,7 +96,7 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
         predecessor_ids.update({'parent_ids': task_ids_list})
 
         task_pool.do_link_predecessors(
-            cr, uid, task_id, predecessor_ids, context=context
+             task_id, predecessor_ids, context=context
         )
 
         return {'type': 'ir.actions.act_window_close'}
@@ -116,32 +116,32 @@ class ProjectTaskLinkPredecessors(osv.osv_memory):
         ),
     }
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self,  fields, context=None):
         """
         This function gets default values
         """
         res = super(ProjectTaskLinkPredecessors, self).default_get(
-            cr, uid, fields, context=context
+             fields, context=context
         )
         if context is None:
             context = {}
         record_id = context and context.get('active_id', False) or False
         task_pool = self.pool.get('project.task')
         task_data = []
-        task_data = task_pool.read(cr, uid, record_id, ['parent_ids'])
+        task_data = task_pool.read( record_id, ['parent_ids'])
         parent_ids = task_data['parent_ids']
 
         res.update({'parent_ids': parent_ids})
         return res
 
-    def link_predecessors(self, cr, uid, ids, context=None):
+    def link_predecessors(self,  ids, context=None):
         if context is None:
             context = {}
         task_id = context.get('active_id', False)
         task_pool = self.pool.get('project.task')
-        link_predecessors_data = self.read(cr, uid, ids, context=context)[0]
+        link_predecessors_data = self.read( ids, context=context)[0]
         task_pool.do_link_predecessors(
-            cr, uid, task_id, link_predecessors_data, context=context
+             task_id, link_predecessors_data, context=context
         )
 
         return {'type': 'ir.actions.act_window_close'}

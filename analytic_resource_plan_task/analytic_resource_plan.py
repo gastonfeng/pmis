@@ -70,7 +70,7 @@ class analytic_resource_plan_line(models.Model):
             task_obj = self.pool.get('project.task')
 
             if task_id:
-                task = task_obj.browse(cr, uid, task_id, context=context)
+                task = task_obj.browse( task_id, context=context)
                 account_id = (
                     task.project_id and
                     task.project_id.analytic_account_id and
@@ -111,13 +111,13 @@ class analytic_resource_plan_line(models.Model):
                 return {}
 
     def create(
-        self, cr, uid, vals, *args, **kwargs
+        self,  vals, *args, **kwargs
     ):
         context = kwargs.get('context', {})
         task_obj = self.pool.get('project.task')
 
         if 'task_id' in vals and vals['task_id']:
-            task = task_obj.browse(cr, uid, vals['task_id'], context=context)
+            task = task_obj.browse( vals['task_id'], context=context)
             vals['account_id'] = (
                 task.project_id and
                 task.project_id.analytic_account_id and
@@ -125,18 +125,18 @@ class analytic_resource_plan_line(models.Model):
                 False
             )
         return super(analytic_resource_plan_line, self).create(
-            cr, uid, vals, *args, **kwargs
+             vals, *args, **kwargs
         )
 
     def write(
-        self, cr, uid, ids, vals, context=None
+        self,  ids, vals, context=None
     ):
         if context is None:
             context = {}
 
         if isinstance(ids, (long, int)):
             ids = [ids]
-        for p in self.browse(cr, uid, ids, context=context):
+        for p in self.browse( ids, context=context):
 
             if 'task_id' in vals:
                 task_id = vals['task_id']
@@ -145,7 +145,7 @@ class analytic_resource_plan_line(models.Model):
 
             if task_id:
                 task_obj = self.pool.get('project.task')
-                task = task_obj.browse(cr, uid, task_id, context=context)
+                task = task_obj.browse( task_id, context=context)
 
                 if 'unit_amount' in vals:
                     if (
@@ -160,7 +160,7 @@ class analytic_resource_plan_line(models.Model):
                             )
 
         return super(analytic_resource_plan_line, self).write(
-            cr, uid, ids, vals, context=context
+             ids, vals, context=context
         )
 
 analytic_resource_plan_line()

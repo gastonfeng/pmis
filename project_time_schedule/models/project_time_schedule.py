@@ -77,7 +77,7 @@ subsequent activity.
         ),
     }
 
-    def onchange_duration(self, cr, uid, ids, duration):
+    def onchange_duration(self,  ids, duration):
         result = {}
 
         if duration < 0:
@@ -88,7 +88,7 @@ subsequent activity.
 
         return result
 
-    def get_network(self, cr, uid, ids, d_activities, *args):
+    def get_network(self,  ids, d_activities, *args):
 
         read_data = []
         read_data = self.read(
@@ -104,7 +104,7 @@ subsequent activity.
         closed = True
         if read_data['stage_id']:
             stage_data = task_stage_obj.read(
-                cr, uid, read_data['stage_id'][0], ['fold']
+                 read_data['stage_id'][0], ['fold']
             )
             closed = stage_data['fold']
 
@@ -149,7 +149,7 @@ subsequent activity.
                 lchild_id.append(child_id)
                 d_activities.update(
                     self.get_network(
-                        cr, uid, lchild_id, d_activities
+                         lchild_id, d_activities
                     )
                 )
 
@@ -163,7 +163,7 @@ subsequent activity.
                 lparent_id.append(parent_id)
                 d_activities.update(
                     self.get_network(
-                        cr, uid, lparent_id, d_activities
+                         lparent_id, d_activities
                     )
                 )
 
@@ -171,7 +171,7 @@ subsequent activity.
 
         return d_activities
 
-    def calculate_network(self, cr, uid, ids, context, *args):
+    def calculate_network(self,  ids, context, *args):
 
         d_activities = {}
         d_activities['start'] = network_activity(None, 0, None, None)
@@ -181,10 +181,10 @@ subsequent activity.
         d_activities['stop'].is_stop = True
         d_activities['stop'].activity_id = 'stop'
 
-        d_activities = self.get_network(cr, uid, ids, d_activities)
+        d_activities = self.get_network( ids, d_activities)
 
         self.get_critical_activities(d_activities)
-        self.update_tasks(cr, uid, ids, d_activities)
+        self.update_tasks( ids, d_activities)
 
     def get_critical_activities(self, d_activities):
         # warning = {}
@@ -275,14 +275,14 @@ subsequent activity.
             if item is not None:
                 act.is_critical_path = True
 
-    def update_tasks(self, cr, uid, ids, d_activities, context=None):
+    def update_tasks(self,  ids, d_activities, context=None):
         if context is None:
             context = {}
         task_obj = self.pool.get('project.task')
         context.update({'calculate_network': True})
         for task_id in d_activities.keys():
             if (not task_id == 'start') and (not task_id == 'stop'):
-                task_obj.write(cr, uid, task_id, {
+                task_obj.write( task_id, {
                     'date_early_start': d_activities[
                         task_id].date_early_start,
                     'date_early_finish': d_activities[
@@ -299,15 +299,15 @@ subsequent activity.
                         task_id].free_float,
                 }, context=context)
 
-    def create(self, cr, uid, vals, context=None):
-        res = super(task, self).create(cr, uid, vals, context)
-        self.calculate_network(cr, uid, [res], context)
+    def create(self,  vals, context=None):
+        res = super(task, self).create( vals, context)
+        self.calculate_network( [res], context)
         return res
 
-    def write(self, cr, uid, ids, vals, context=None):
+    def write(self,  ids, vals, context=None):
         if context is None:
             context = {}
-        res = super(task, self).write(cr, uid, ids, vals, context)
+        res = super(task, self).write( ids, vals, context)
         if not context.get('calculate_network') and ids and (
             vals.get('duration') or
             vals.get('stage_id') or
@@ -318,7 +318,7 @@ subsequent activity.
         ):
             if not isinstance(ids, list):
                 ids = [ids]
-            self.calculate_network(cr, uid, ids, context)
+            self.calculate_network( ids, context)
         return res
 
 task()
