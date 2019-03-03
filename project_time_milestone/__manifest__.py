@@ -33,7 +33,9 @@
     'website': 'http://project.expert',
     'category': 'Project Management',
     'license': 'AGPL-3',
-    'depends': ['project', 'project_time_schedule', 'project_charter'],
+    'depends': ['project', 'project_time_schedule',
+                #                'project_charter'
+                ],
     'data': [
         'project_time_milestone_view.xml',
     ],

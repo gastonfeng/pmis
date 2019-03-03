@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-import project_time_schedule
+from . import project_time_schedule

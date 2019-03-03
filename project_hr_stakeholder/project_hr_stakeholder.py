@@ -30,12 +30,12 @@ class ProjectHrStakeholder(orm.Model):
     _name = "project.hr.stakeholder"
     _description = 'Project Stakeholder'
 
-    def _roles_name_calc(self, cr, uid, ids, name, args, context=None):
+    def _roles_name_calc(self,  ids, name, args, context=None):
         if not ids:
             return []
         res = []
 
-        stakeholders_br = self.browse(cr, uid, ids, context=context)
+        stakeholders_br = self.browse( ids, context=context)
 
         for stakeholder in stakeholders_br:
             data = []
@@ -54,13 +54,13 @@ class ProjectHrStakeholder(orm.Model):
         return dict(res)
 
     def _responsibilities_name_calc(
-            self, cr, uid, ids, name, args, context=None):
+            self,  ids, name, args, context=None):
 
         if not ids:
             return []
         res = []
 
-        stakeholders_br = self.browse(cr, uid, ids, context=context)
+        stakeholders_br = self.browse( ids, context=context)
 
         for stakeholder in stakeholders_br:
             data = []
@@ -139,13 +139,13 @@ class ProjectHrStakeholder(orm.Model):
         ),
     }
 
-    def name_get(self, cr, uid, ids, context=None):
+    def name_get(self,  ids, context=None):
         if context is None:
             context = {}
         if not ids:
             return []
         res = []
-        for stakeholder in self.browse(cr, uid, ids, context=context):
+        for stakeholder in self.browse( ids, context=context):
             stakeholder_name = ""
             if stakeholder.partner_id:
                 stakeholder_name = stakeholder.partner_id.name

@@ -19,80 +19,49 @@
 #
 ##############################################################################
 
-from datetime import datetime, date, timedelta
-from openerp.tools.translate import _
-from openerp.osv import fields, osv
-from dijkstra import shortestPath
-from itertools import count
-from dateutil.rrule import rrule
-from dateutil.rrule import DAILY, MO, TU, WE, TH, FR, HOURLY
 import logging
+from datetime import datetime, date, timedelta
+from itertools import count
 
+from dateutil.rrule import DAILY, MO, TU, WE, TH, FR, HOURLY
+from dateutil.rrule import rrule
+
+from odoo import models, fields
+from odoo.osv import osv
+from .dijkstra import shortestPath
 
 _logger = logging.getLogger(__name__)
 
 
-class task(osv.osv):
+class task(models.Model):
     _inherit = 'project.task'
     _description = "Activity"
 
-    _columns = {
-        'duration': fields.integer(
-            'Activity duration', help='Duration in calendar hours'
-        ),
-        'date_early_start': fields.datetime(
-            'Early Start Date', select=True
-        ),
-        'date_early_finish': fields.datetime(
-            'Early Finish Date', select=True
-        ),
-        'date_late_start': fields.datetime(
-            'Late Start Date', select=True
-        ),
-        'date_late_finish': fields.datetime(
-            'Late Finish Date', select=True
-        ),
-        'is_critical_path': fields.boolean(
-            'Critical Path'
-        ),
-        'date_earliest_start': fields.datetime(
-            'Earliest Start Date', select=True
-        ),
-        'date_latest_finish': fields.datetime(
-            'Latest Finish Date', select=True
-        ),
-        'total_float': fields.integer(
-            'Total float',
-            help='''
-Number of hours that the activity can be delayed without delaying the project.
-            '''
-        ),
-        'free_float': fields.integer(
-            'Free float',
-            help='''
-Number of hours that the activity can be delayed without delaying the next
-subsequent activity.
-            '''
-        ),
-    }
+    duration = fields.Integer('Activity duration', help='Duration in calendar hours')
+    date_early_start = fields.Datetime('Early Start Date', select=True)
+    date_early_finish = fields.Datetime('Early Finish Date', select=True)
+    date_late_start = fields.Datetime('Late Start Date', select=True)
+    date_late_finish = fields.Datetime('Late Finish Date', select=True)
+    is_critical_path = fields.Boolean('Critical Path')
+    date_earliest_start = fields.Datetime('Earliest Start Date', select=True)
+    date_latest_finish = fields.Datetime('Latest Finish Date', select=True)
+    total_float = fields.Integer('Total float',
+                                 help='''Number of hours that the activity can be delayed without delaying the project.''')
+    free_float = fields.Integer('Free float',
+                                help='''Number of hours that the activity can be delayed without delaying the next subsequent activity.''')
 
-    def onchange_duration(self, cr, uid, ids, duration):
+    def onchange_duration(self, ids, duration):
         result = {}
 
         if duration < 0:
-            raise osv.except_osv(
-                _('Error'),
-                _("The task duration cannot be set to a value less than zero.")
-            )
+            raise osv.except_osv('Error', "The task duration cannot be set to a value less than zero.")
 
         return result
 
-    def get_network(self, cr, uid, ids, d_activities, *args):
+    def get_network(self, ids, d_activities, *args):
 
         read_data = []
         read_data = self.read(
-            cr,
-            uid,
             ids[0],
             [
                 'duration', 'child_ids', 'parent_ids', 'date_earliest_start',
@@ -103,7 +72,7 @@ subsequent activity.
         closed = True
         if read_data['stage_id']:
             stage_data = task_stage_obj.read(
-                cr, uid, read_data['stage_id'][0], ['fold']
+                read_data['stage_id'][0], ['fold']
             )
             closed = stage_data['fold']
 
@@ -148,7 +117,7 @@ subsequent activity.
                 lchild_id.append(child_id)
                 d_activities.update(
                     self.get_network(
-                        cr, uid, lchild_id, d_activities
+                        lchild_id, d_activities
                     )
                 )
 
@@ -162,7 +131,7 @@ subsequent activity.
                 lparent_id.append(parent_id)
                 d_activities.update(
                     self.get_network(
-                        cr, uid, lparent_id, d_activities
+                        lparent_id, d_activities
                     )
                 )
 
@@ -170,7 +139,7 @@ subsequent activity.
 
         return d_activities
 
-    def calculate_network(self, cr, uid, ids, context, *args):
+    def calculate_network(self, ids, context, *args):
 
         d_activities = {}
         d_activities['start'] = network_activity(None, 0, None, None)
@@ -180,10 +149,10 @@ subsequent activity.
         d_activities['stop'].is_stop = True
         d_activities['stop'].activity_id = 'stop'
 
-        d_activities = self.get_network(cr, uid, ids, d_activities)
+        d_activities = self.get_network(ids, d_activities)
 
         self.get_critical_activities(d_activities)
-        self.update_tasks(cr, uid, ids, d_activities)
+        self.update_tasks(ids, d_activities)
 
     def get_critical_activities(self, d_activities):
         # warning = {}
@@ -274,14 +243,14 @@ subsequent activity.
             if item is not None:
                 act.is_critical_path = True
 
-    def update_tasks(self, cr, uid, ids, d_activities, context=None):
+    def update_tasks(self, ids, d_activities, context=None):
         if context is None:
             context = {}
         task_obj = self.pool.get('project.task')
         context.update({'calculate_network': True})
         for task_id in d_activities.keys():
             if (not task_id == 'start') and (not task_id == 'stop'):
-                task_obj.write(cr, uid, task_id, {
+                task_obj.write(task_id, {
                     'date_early_start': d_activities[
                         task_id].date_early_start,
                     'date_early_finish': d_activities[
@@ -298,27 +267,28 @@ subsequent activity.
                         task_id].free_float,
                 }, context=context)
 
-    def create(self, cr, uid, vals, context=None):
-        res = super(task, self).create(cr, uid, vals, context)
-        self.calculate_network(cr, uid, [res], context)
+    def create(self, vals, context=None):
+        res = super(task, self).create(vals, context)
+        self.calculate_network([res], context)
         return res
 
-    def write(self, cr, uid, ids, vals, context=None):
+    def write(self, ids, vals, context=None):
         if context is None:
             context = {}
-        res = super(task, self).write(cr, uid, ids, vals, context)
+        res = super(task, self).write(ids, vals, context)
         if not context.get('calculate_network') and ids and (
-            vals.get('duration') or
-            vals.get('stage_id') or
-            vals.get('date_latest_finish') or
-            vals.get('date_earliest_start') or
-            vals.get('parent_ids') or
-            vals.get('child_ids')
+                vals.get('duration') or
+                vals.get('stage_id') or
+                vals.get('date_latest_finish') or
+                vals.get('date_earliest_start') or
+                vals.get('parent_ids') or
+                vals.get('child_ids')
         ):
             if not isinstance(ids, list):
                 ids = [ids]
-            self.calculate_network(cr, uid, ids, context)
+            self.calculate_network(ids, context)
         return res
+
 
 task()
 
@@ -327,11 +297,11 @@ class network_activity(object):
     'Activity in network diagram'
 
     def __init__(
-        self, activity_id, duration, date_earliest_start, date_latest_finish
+            self, activity_id, duration, date_earliest_start, date_latest_finish
     ):
 
         # DATE_FORMAT = "%Y-%m-%d"
-        DATE_INIT = datetime(1900, 01, 01, 9, 0)
+        DATE_INIT = datetime(1900, 1, 1, 9, 0)
 
         self.activity_id = activity_id
 
@@ -485,7 +455,6 @@ class network_activity(object):
 
             for predecessor in successor.predecessors:
                 if successor.date_early_start < predecessor.date_early_finish:
-
                     successor.date_early_start = predecessor.date_early_finish
 
             successor.date_early_finish = network_activity.add_work_days(
@@ -498,7 +467,7 @@ class network_activity(object):
     @staticmethod
     def walk_list_aback(activity):
 
-        DATE_INIT = datetime(1900, 01, 01, 9, 0)
+        DATE_INIT = datetime(1900, 1, 1, 9, 0)
 
         if activity.date_latest_finish:
             if activity.date_late_finish > activity.date_latest_finish:

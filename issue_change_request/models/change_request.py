@@ -21,7 +21,7 @@ class IssuePartnerBinding(osv.osv_memory):
         'partner_id': fields.many2one('res.partner', 'Customer'),
     }
 
-    def _find_matching_partner(self, cr, uid, context=None):
+    def _find_matching_partner(self,  context=None):
         """
         Try to find a matching partner regarding the active model data, like
         the customer's name, email, phone number, etc.
@@ -39,7 +39,7 @@ class IssuePartnerBinding(osv.osv_memory):
             context.get('active_id')
         ):
             active_model = self.pool.get('project.issue').browse(
-                cr, uid, context.get('active_id'), context=context
+                 context.get('active_id'), context=context
             )
 
         # Find the best matching partner for the active model
@@ -52,7 +52,7 @@ class IssuePartnerBinding(osv.osv_memory):
             # Search through the existing partners based on the lead's email
             elif active_model.email_from:
                 partner_ids = partner_obj.search(
-                    cr, uid,
+
                     [('email', '=', active_model.email_from)],
                     context=context
                 )
@@ -62,7 +62,7 @@ class IssuePartnerBinding(osv.osv_memory):
             # or contact name
             elif active_model.partner_name:
                 partner_ids = partner_obj.search(
-                    cr, uid,
+
                     [('name', 'ilike', '%'+active_model.partner_name+'%')],
                     context=context
                 )
@@ -70,7 +70,7 @@ class IssuePartnerBinding(osv.osv_memory):
                     partner_id = partner_ids[0]
             elif active_model.contact_name:
                 partner_ids = partner_obj.search(
-                    cr, uid, [
+                     [
                         ('name', 'ilike', '%'+active_model.contact_name+'%')
                     ], context=context
                 )
@@ -79,11 +79,11 @@ class IssuePartnerBinding(osv.osv_memory):
 
         return partner_id
 
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self,  fields, context=None):
         res = super(IssuePartnerBinding, self).default_get(
-            cr, uid, fields, context=context
+             fields, context=context
         )
-        partner_id = self._find_matching_partner(cr, uid, context=context)
+        partner_id = self._find_matching_partner( context=context)
 
         if 'action' in fields and not res.get('action'):
             res['action'] = partner_id and 'exist' or 'create'
@@ -111,13 +111,13 @@ class Issue2ChangeWizard(osv.TransientModel):
     }
 
     _defaults = {
-        "issue_id": lambda self, cr, uid, context=None: context.get(
+        "issue_id": lambda self,  context=None: context.get(
             'active_id')
     }
 
-    def action_issue_to_change_request(self, cr, uid, ids, context=None):
+    def action_issue_to_change_request(self,  ids, context=None):
         # get the wizards and models
-        wizards = self.browse(cr, uid, ids, context=context)
+        wizards = self.browse( ids, context=context)
         issue_obj = self.pool["project.issue"]
         cr_obj = self.pool["change.management.change"]
         attachment_obj = self.pool['ir.attachment']
@@ -126,10 +126,10 @@ class Issue2ChangeWizard(osv.TransientModel):
             # get the issue to transform
             issue = wizard.issue_id
 
-            partner = self._find_matching_partner(cr, uid, context=context)
+            partner = self._find_matching_partner( context=context)
             if not partner and (issue.partner_name or issue.contact_name):
                 partner_ids = issue_obj.handle_partner_assignation(
-                    cr, uid, [issue.id], context=context
+                     [issue.id], context=context
                 )
                 partner = partner_ids[issue.id]
 
@@ -143,16 +143,16 @@ class Issue2ChangeWizard(osv.TransientModel):
                 "author_id": uid,
                 "change_category_id": wizard.change_category_id.id
             }
-            change_id = cr_obj.create(cr, uid, vals, context=None)
-            change = cr_obj.browse(cr, uid, change_id, context=None)
+            change_id = cr_obj.create( vals, context=None)
+            change = cr_obj.browse( change_id, context=None)
             # move the mail thread
             issue_obj.message_change_thread(
-                cr, uid, issue.id, change_id,
+                 issue.id, change_id,
                 "change.management.change", context=context
             )
             # Move attachments
             attachment_ids = attachment_obj.search(
-                cr, uid,
+
                 [
                     ('res_model', '=', 'project.issue'),
                     ('res_id', '=', issue.id)
@@ -160,19 +160,19 @@ class Issue2ChangeWizard(osv.TransientModel):
                 context=context
             )
             attachment_obj.write(
-                cr, uid, attachment_ids,
+                 attachment_ids,
                 {'res_model': 'change.management.change', 'res_id': change_id},
                 context=context
             )
             # Archive the lead
             issue_obj.write(
-                cr, uid, [issue.id], {'active': False}, context=context
+                 [issue.id], {'active': False}, context=context
             )
             # delete the lead
-            # issue_obj.unlink(cr, uid, [issue.id], context=None)
+            # issue_obj.unlink( [issue.id], context=None)
         # return the action to go to the form view of the new Issue
         view_id = self.pool.get('ir.ui.view').search(
-            cr, uid,
+
             [
                 ('model', '=', 'change.management.change'),
                 ('name', '=', 'change_form_view')

@@ -27,8 +27,8 @@
             <field name="type">form</field>
             <field eval="2" name="priority"/>
             <field name="inherit_id" ref="project.view_task_form2"/>       
-            <field name="arch" type="xml">        
-        		<xpath expr="//page[@string='Delegation']" position="replace">        		        			
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='Delegation']" position="replace">
 					<page  string="Relationships">
                         <separator string="Predecessor Activities" colspan="4"/>
                         <field colspan="4" height="150" name="parent_ids" nolabel="1"/>

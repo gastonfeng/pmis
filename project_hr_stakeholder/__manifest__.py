@@ -37,7 +37,7 @@
         'base',
         'project',
         'analytic_plan',
-        'project_charter'
+        #        'project_charter'
     ],
     'data': [
         'project_hr_role.xml',

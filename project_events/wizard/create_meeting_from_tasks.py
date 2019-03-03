@@ -34,11 +34,11 @@ class EventFromTask(orm.TransientModel):
         'duration': 4.0,
     }
 
-    def action_event(self, cr, uid, ids, context=None):
+    def action_event(self,  ids, context=None):
         if context is None:
             context = {}
 
-        for data in self.browse(cr, uid, ids, context=context):
+        for data in self.browse( ids, context=context):
             projects = {}
             event_ids = []
 
@@ -50,7 +50,7 @@ class EventFromTask(orm.TransientModel):
             if 'active_ids' in context:
                 task_ids = context['active_ids']
 
-                for task in task_obj.browse(cr, uid, task_ids,
+                for task in task_obj.browse( task_ids,
                                             context=context):
                     if task.project_id.id in projects:
                         projects[task.project_id.id].append(task.id)
@@ -62,9 +62,9 @@ class EventFromTask(orm.TransientModel):
             end_date = end_date.strftime('%Y-%m-%d %H:%M:%S')
 
             for project_id in projects.keys():
-                project = project_obj.browse(cr, uid, project_id,
+                project = project_obj.browse( project_id,
                                              context=context)
-                event_id = event_obj.create(cr, uid,
+                event_id = event_obj.create(
                                             {
                                                 'name': project.name,
                                                 'project_id': project_id,

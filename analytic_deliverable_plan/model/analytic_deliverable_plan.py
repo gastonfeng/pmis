@@ -14,7 +14,7 @@ class AnalyticDeliverablePlanLine(models.Model):
 
     _name = 'analytic.deliverable.plan.line'
     _description = "Analytic Deliverable Planning lines"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     account_id = fields.Many2one(
         comodel_name='account.analytic.account',

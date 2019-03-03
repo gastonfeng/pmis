@@ -26,12 +26,12 @@ from openerp import tools
 class Task(orm.Model):
     _inherit = 'project.task'
 
-    def get_related_tasks(self, cr, uid, ids, context=None):
+    def get_related_tasks(self,  ids, context=None):
         result = {}
         # data = []
         # read_data = []
 
-        tasks_br = self.browse(cr, uid, ids, context=None)
+        tasks_br = self.browse( ids, context=None)
 
         for t in tasks_br:
             result[t.id] = True
@@ -42,14 +42,14 @@ class Task(orm.Model):
         return result
 
     def _predecessor_ids_calc(
-        self, cr, uid, ids, prop, unknow_none, unknow_dict
+        self,  ids, prop, unknow_none, unknow_dict
     ):
         if not ids:
             return []
         res = []
         data = []
 
-        tasks_br = self.browse(cr, uid, ids, context=None)
+        tasks_br = self.browse( ids, context=None)
 
         for t in tasks_br:
             data = []
@@ -68,14 +68,14 @@ class Task(orm.Model):
         return dict(res)
 
     def _predecessor_names_calc(
-        self, cr, uid, ids, prop, unknow_none, unknow_dict
+        self,  ids, prop, unknow_none, unknow_dict
     ):
         if not ids:
             return []
         res = []
         data = []
 
-        tasks_br = self.browse(cr, uid, ids, context=None)
+        tasks_br = self.browse( ids, context=None)
 
         for t in tasks_br:
             data = []
@@ -122,14 +122,14 @@ class Task(orm.Model):
         }
 
     def do_link_predecessors(
-        self, cr, uid, task_id, link_predecessors_data=None, context=None
+        self,  task_id, link_predecessors_data=None, context=None
     ):
 
         if link_predecessors_data is None:
             link_predecessors_data = {}
-        task_br = self.browse(cr, uid, task_id, context=context)
+        task_br = self.browse( task_id, context=context)
 
-        self.write(cr, uid, [task_br.id], {
+        self.write( [task_br.id], {
             'parent_ids': [(6, 0, link_predecessors_data['parent_ids'])],
         })
 

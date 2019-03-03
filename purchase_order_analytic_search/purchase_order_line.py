@@ -18,24 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-from openerp.osv import fields, osv
 
-
-class purchase_order_line(osv.osv):
+class purchase_order_line(models.Model):
 
     _inherit = "purchase.order.line"
 
-    _columns = {
-        'account_analytic_user_id': fields.related(
-            'account_analytic_id',
-            'user_id',
-            type='many2one',
-            relation='res.users',
-            string='Project Manager',
-            store=True,
-            readonly=True
-        ),
-    }
-
-purchase_order_line()
+    account_analytic_user_id = fields.Many2one(related='account_analytic_id.user_id', type='many2one',
+                                               relation='res.users', string='Project Manager', store=True,
+                                               readonly=True)

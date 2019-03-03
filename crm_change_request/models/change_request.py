@@ -20,12 +20,12 @@ class LeadToChangeRequestWizard(osv.TransientModel):
     }
 
     _defaults = {
-        "lead_id": lambda self, cr, uid, context=None: context.get('active_id')
+        "lead_id": lambda self,  context=None: context.get('active_id')
     }
 
-    def action_lead_to_change_request(self, cr, uid, ids, context=None):
+    def action_lead_to_change_request(self,  ids, context=None):
         # get the wizards and models
-        wizards = self.browse(cr, uid, ids, context=context)
+        wizards = self.browse( ids, context=context)
         lead_obj = self.pool["crm.lead"]
         cr_obj = self.pool["change.management.change"]
         attachment_obj = self.pool['ir.attachment']
@@ -34,10 +34,10 @@ class LeadToChangeRequestWizard(osv.TransientModel):
             # get the lead to transform
             lead = wizard.lead_id
 
-            partner = self._find_matching_partner(cr, uid, context=context)
+            partner = self._find_matching_partner( context=context)
             if not partner and (lead.partner_name or lead.contact_name):
                 partner_ids = lead_obj.handle_partner_assignation(
-                    cr, uid, [lead.id], context=context
+                     [lead.id], context=context
                 )
                 partner = partner_ids[lead.id]
 
@@ -51,32 +51,32 @@ class LeadToChangeRequestWizard(osv.TransientModel):
                 "author_id": uid,
                 "change_category_id": wizard.change_category_id.id,
             }
-            change_id = cr_obj.create(cr, uid, vals, context=None)
-            change = cr_obj.browse(cr, uid, change_id, context=None)
+            change_id = cr_obj.create( vals, context=None)
+            change = cr_obj.browse( change_id, context=None)
             # move the mail thread
             lead_obj.message_change_thread(
-                cr, uid, lead.id, change_id,
+                 lead.id, change_id,
                 "change.management.change", context=context
             )
             # Move attachments
             attachment_ids = attachment_obj.search(
-                cr, uid,
+
                 [('res_model', '=', 'crm.lead'), ('res_id', '=', lead.id)],
                 context=context
             )
             attachment_obj.write(
-                cr, uid, attachment_ids,
+                 attachment_ids,
                 {'res_model': 'change.management.change', 'res_id': change_id},
                 context=context
             )
             # Archive the lead
             lead_obj.write(
-                cr, uid, [lead.id], {'active': False}, context=context)
+                 [lead.id], {'active': False}, context=context)
             # delete the lead
-            # lead_obj.unlink(cr, uid, [lead.id], context=None)
+            # lead_obj.unlink( [lead.id], context=None)
         # return the action to go to the form view of the new CR
         view_id = self.pool.get('ir.ui.view').search(
-            cr, uid,
+
             [
                 ('model', '=', 'change.management.change'),
                 ('name', '=', 'change_form_view')

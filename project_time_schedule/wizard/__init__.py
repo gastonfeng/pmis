@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-import project_task_calculate_network
+from . import project_task_calculate_network

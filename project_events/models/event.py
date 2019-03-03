@@ -7,11 +7,11 @@ class EventEvent(orm.Model):
     _inherit = 'event.event'
 
     def _task_count(
-        self, cr, uid, ids, field_name, arg, context=None
+        self,  ids, field_name, arg, context=None
     ):
         res = {}
         for event in self.browse(
-            cr, uid, ids, context=context
+             ids, context=context
         ):
             res[event.id] = len(event.task_ids)
         return res
@@ -31,13 +31,13 @@ class EventEvent(orm.Model):
     }
 
     def agenda_description(
-        self, cr, uid, ids, context=None
+        self,  ids, context=None
     ):
         if context is None:
             context = {}
 
         for event in self.browse(
-            cr, uid, ids, context=context
+             ids, context=context
         ):
             if event.task_count > 0:
                 agenda = "<p><strong>Agenda:</strong></p>\n<ul>\n"
@@ -45,7 +45,7 @@ class EventEvent(orm.Model):
                     agenda += "<li>" + task.name + "</li>\n"
                 agenda += "</ul>\n"
 
-                self.write(cr, uid, event.id,
+                self.write( event.id,
                            {'description': (event.description or '') + agenda},
                            context=context)
         return True

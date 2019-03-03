@@ -7,11 +7,11 @@ class ProjectProject(orm.Model):
     _inherit = 'project.project'
 
     def _event_count(
-        self, cr, uid, ids, field_name, arg, context=None
+            self, ids, field_name, arg, context=None
     ):
         res = {}
         for project in self.browse(
-            cr, uid, ids, context=context
+                ids, context=context
         ):
             res[project.id] = len(project.event_ids)
         return res
@@ -34,22 +34,22 @@ class ProjectTask(orm.Model):
     _inherit = 'project.task'
 
     def _event_count(
-        self, cr, uid, ids, field_name, arg, context=None
+            self, ids, field_name, arg, context=None
     ):
         res = {}
         for task in self.browse(
-            cr, uid, ids, context=context
+                ids, context=context
         ):
             res[task.id] = len(task.event_ids)
         return res
 
     def _pending_event_count(
-        self, cr, uid, ids, field_name, arg,
+            self, ids, field_name, arg,
         context=None
     ):
         res = {}
         for task in self.browse(
-            cr, uid, ids, context=context
+                ids, context=context
         ):
             event_cnt = 0
             for event in task.event_ids:
@@ -78,13 +78,13 @@ class ProjectTask(orm.Model):
     }
 
     def action_show_events(
-        self, cr, uid, ids, context=None
+            self, ids, context=None
     ):
         if context is None:
             context = {}
 
         event_ids = self.pool['event.event'].search(
-            cr, uid, [['task_ids', 'in', ids]]
+            [['task_ids', 'in', ids]]
         )
 
         return {
