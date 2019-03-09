@@ -89,6 +89,6 @@
 
     <menuitem action="action_account_analytic_plan_actual_amounts"
               id="menu_action_account_analytic_plan_actual_tree"
-              parent="project.menu_project_report"/>
+              parent="base.menu_reporting_config"/>
 
 </odoo>

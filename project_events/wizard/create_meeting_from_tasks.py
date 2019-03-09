@@ -16,18 +16,17 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
 from datetime import datetime, timedelta
+
+from openerp.osv import orm, fields
 
 
 class EventFromTask(orm.TransientModel):
     _name = 'project.task.create.event'
 
-    _columns = {
-        'date': fields.datetime('Date'),
-        'duration': fields.float('Duration'),
-        'type': fields.many2one('event.type', 'Event Type'),
-    }
+    date = fields.Datetime('Date')
+    duration = fields.Float('Duration')
+    type = fields.Many2one('event.type', 'Event Type')
 
     _defaults = {
         'date': datetime.strftime(datetime.now(), '%Y-%m-%d 08:00:00'),

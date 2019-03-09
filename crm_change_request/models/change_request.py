@@ -9,15 +9,10 @@ class LeadToChangeRequestWizard(osv.TransientModel):
     _name = "crm.lead2cr.wizard"
     _inherit = 'crm.partner.binding'
 
-    _columns = {
-        "lead_id": fields.many2one(
-            "crm.lead", "Lead", domain=[("type", "=", "lead")]
-        ),
-        # "project_id": fields.many2one("project.project", "Project"),
-        "change_category_id": fields.many2one(
-            "change.management.category", "Change Category"
-        ),
-    }
+    lead_id = fields.Many2one("crm.lead", "Lead", domain=[("type", "=", "lead")])
+    # "project_id": fields.many2one("project.project", "Project"),
+    change_category_id = fields.Many2one("change.management.category", "Change Category")
+
 
     _defaults = {
         "lead_id": lambda self,  context=None: context.get('active_id')

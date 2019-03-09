@@ -21,12 +21,12 @@
 import logging
 import threading
 
-from openerp.addons.base.ir.ir_mail_server import extract_rfc2822_addresses
-from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
+import openerp.tools as tools
 from openerp import SUPERUSER_ID
+from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
+from openerp.addons.base.ir.ir_mail_server import extract_rfc2822_addresses
 from openerp.osv import osv
 from openerp.tools.translate import _
-import openerp.tools as tools
 
 _logger = logging.getLogger(__name__)
 _test_logger = logging.getLogger('openerp.tests')

@@ -84,18 +84,8 @@ class account_invoice(models.Model):
             res.append(('id', 'in', invoice_ids))
         return res
 
-    _columns = {
-        'account_analytic_ids': fields.function(
-            _get_analytic_accounts, type='many2many',
-            string='Analytic Account', method=True,
-            fnct_search=_search_analytic_accounts,
-            readonly=True),
+    account_analytic_ids = fields.Many2many(compute='_get_analytic_accounts', string='Analytic Account',
+                                            fnct_search=_search_analytic_accounts, readonly=True)
 
-        'account_analytic_user_ids': fields.function(
-            _get_analytic_account_user_ids, type='many2many',
-            string='Project Manager', method=True,
-            fnct_search=_search_analytic_account_user_ids,
-            readonly=True),
-    }
-
-account_invoice()
+    account_analytic_user_ids = fields.Many2many(compute='_get_analytic_account_user_ids', string='Project Manager',
+                                                 fnct_search=_search_analytic_account_user_ids, readonly=True)

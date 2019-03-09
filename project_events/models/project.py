@@ -16,18 +16,16 @@ class ProjectProject(orm.Model):
             res[project.id] = len(project.event_ids)
         return res
 
-    _columns = {
-        'event_count': fields.function(
-            _event_count,
+    event_count = fields.Integer(
+        compute='_event_count',
             type='integer',
             string='Events'
-        ),
-        'event_ids': fields.one2many(
+    )
+    event_ids = fields.One2many(
             'event.event',
             'project_id',
             'Events'
-        ),
-    }
+    )
 
 
 class ProjectTask(orm.Model):
@@ -58,24 +56,15 @@ class ProjectTask(orm.Model):
             res[task.id] = event_cnt
         return res
 
-    _columns = {
-        'event_count': fields.function(
-            _event_count, type='integer',
-            string='Events'
-        ),
-        'pending_event_count': fields.function(
-            _pending_event_count,
-            type='integer',
-            string='Pending Events'
-        ),
-        'event_ids': fields.many2many(
+    event_count = fields.Integer(compute='_event_count', string='Events')
+    pending_event_count = fields.Integer(compute='_pending_event_count', string='Pending Events')
+    event_ids = fields.Many2many(
             'event.event',
             'rel_task_event',
             'task_id',
             'event_id',
             'Tasks'
-        ),
-    }
+    )
 
     def action_show_events(
             self, ids, context=None

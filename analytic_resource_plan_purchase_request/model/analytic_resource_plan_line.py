@@ -3,8 +3,9 @@
 #   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
 import odoo.addons.decimal_precision as dp
+
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 _REQUEST_STATE = [

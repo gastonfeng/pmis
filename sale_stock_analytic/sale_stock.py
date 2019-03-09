@@ -19,8 +19,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.tools import float_compare
-from openerp import SUPERUSER_ID
 
 
 class sale_order(models.Model):

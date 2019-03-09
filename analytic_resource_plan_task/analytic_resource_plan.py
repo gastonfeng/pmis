@@ -19,22 +19,16 @@
 #
 ##############################################################################
 
-from openerp.tools.translate import _
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 
 class analytic_resource_plan_line(models.Model):
 
     _inherit = 'analytic.resource.plan.line'
 
-    _columns = {
-        'task_id': fields.many2one(
-            'project.task',
-            'Task',
-            required=False,
-            ondelete='cascade'
-        ),
-    }
+    task_id = fields.Many2one('project.task', 'Task', required=False, ondelete='cascade')
+
 
     def on_change_task_id_resource(
         self,

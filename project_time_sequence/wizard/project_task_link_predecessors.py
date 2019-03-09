@@ -20,20 +20,19 @@
 ##############################################################################
 
 
-from openerp.tools.translate import _
 from openerp.osv import fields, osv, orm
+from openerp.tools.translate import _
 
 
 class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
     _name = 'project.task.link.predecessors.str'
     _description = 'Link predecessor tasks'
 
-    _columns = {
-        'predecessor_ids_str': fields.char(
+    predecessor_ids_str = fields.Char(
             'Predecessors',
-            size=64, required=False, select=True,
-            help='List of predecessor task id''s separated by comma'),
-    }
+        size=64, required=False, index=True,
+        help='List of predecessor task id''s separated by comma')
+
 
     def default_get(self,  fields, context=None):
         """
@@ -106,15 +105,13 @@ class ProjectTaskLinkPredecessors(osv.osv_memory):
     _name = 'project.task.link.predecessors'
     _description = 'Link predecessor tasks'
 
-    _columns = {
-        'parent_ids': fields.many2many(
+    parent_ids = fields.Many2many(
             'project.task',
             'project_task_parent_rel',
             'task_id',
             'parent_id',
             'Parent Tasks'
-        ),
-    }
+    )
 
     def default_get(self,  fields, context=None):
         """

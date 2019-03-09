@@ -16,19 +16,9 @@ class EventEvent(orm.Model):
             res[event.id] = len(event.task_ids)
         return res
 
-    _columns = {
-        'project_id': fields.many2one(
-            'project.project', 'Project'
-        ),
-        'task_count': fields.function(
-            _task_count, type='integer',
-            string='Tasks'
-        ),
-        'task_ids': fields.many2many(
-            'project.task', 'rel_task_event',
-            'event_id', 'task_id', 'Tasks'
-        ),
-    }
+    project_id = fields.Many2one('project.project', 'Project')
+    task_count = fields.Integer(compute='_task_count', string='Tasks')
+    task_ids = fields.Many2many('project.task', 'rel_task_event', 'event_id', 'task_id', 'Tasks')
 
     def agenda_description(
         self,  ids, context=None

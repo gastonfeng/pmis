@@ -5,9 +5,10 @@
 #  - Matjaž Mozetič
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+from datetime import datetime
+
 from odoo.tests import common
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from datetime import datetime
 
 
 class TestPurchaseStockAnalytic(common.TransactionCase):

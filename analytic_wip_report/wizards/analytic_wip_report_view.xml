@@ -34,7 +34,7 @@
 
     <menuitem action="action_analytic_wip_report"
               id="analytic_wip_report"
-              parent="project.menu_project_report"
+              parent="base.menu_reporting_config"
               groups="project.group_project_manager"/>
 
 </odoo>

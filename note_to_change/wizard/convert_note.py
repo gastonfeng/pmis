@@ -9,14 +9,8 @@ class ConvertNoteChange(osv.TransientModel):
 
     _name = 'convert.note.change'
 
-    _columns = {
-        "change_category_id": fields.many2one(
-            "change.management.category", "Change Category", required=True
-        ),
-        "project_id": fields.many2one(
-            'project.project', 'Project', help='Project Linked', required=True
-        ),
-    }
+    change_category_id = fields.Many2one("change.management.category", "Change Category", required=True)
+    project_id = fields.Many2one('project.project', 'Project', help='Project Linked', required=True)
 
     def create_change(self, ids, context=None):
         wizard = self.browse(ids, context=context)

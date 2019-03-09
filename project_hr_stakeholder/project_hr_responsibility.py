@@ -19,8 +19,7 @@
 #
 ##############################################################################
 
-from openerp import tools
-from openerp import fields, models, _
+from openerp import fields, models
 
 
 class ProjectHrResponsibility(models.Model):
