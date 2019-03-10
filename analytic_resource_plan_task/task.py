@@ -18,32 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.tools.translate import _
-from openerp.osv import fields, osv
 from datetime import date
 from datetime import datetime as dt
 
+from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 
 class project_task(models.Model):
     _inherit = "project.task"
-    _columns = {
-        'resource_plan_lines': fields.one2many(
-            'analytic.resource.plan.line',
-            'task_id',
-            "Planned resources"
-        ),
-        'default_resource_plan_line': fields.many2one(
-            'analytic.resource.plan.line',
-            'Default resource plan line',
-            required=False,
-            help='''
+
+    resource_plan_lines = fields.One2many('analytic.resource.plan.line', 'task_id', "Planned resources")
+    default_resource_plan_line = fields.Many2one('analytic.resource.plan.line', 'Default resource plan line',
+                                                 required=False, help='''
             Resource plan line associated to the
             employee assigned to the task
             ''',
-            ondelete="cascade"
-        ),
-    }
+                                                 ondelete="cascade"
+                                                 )
 
     def _prepare_resource_plan_line(
         self,  plan_input, context=None

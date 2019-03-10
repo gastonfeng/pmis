@@ -26,32 +26,21 @@ from openerp.osv import fields
 class task(models.Model):
     _inherit = 'project.task'
 
-    _columns = {
-        'milestone': fields.boolean(
-            'Milestone',
-            help="""
+    milestone = fields.Boolean('Milestone', help="""
 If the active field is set, the task is considered to be a milestone
-            """
-        ),
-        'public_milestone': fields.boolean(
-            'Public Milestone',
-            help="""
+        """
+                               )
+    public_milestone = fields.Boolean('Public Milestone', help="""
 If the active field is set, the task is considered to be a client-relevant
 milestone
-            """
-        ),
-        'project_poc': fields.float(
-            'Project percentage of completion',
-            help="Percentage of completion for the linked project"
-        ),
-        'invoice_percentage': fields.float(
-            'Invoice percentage',
-            help="Percentage to invoice"
-        ),
-    }
+        """
+                                      )
+    project_poc = fields.Float('Project percentage of completion',
+                               help="Percentage of completion for the linked project")
+    invoice_percentage = fields.Float('Invoice percentage', help="Percentage to invoice")
 
 
-task()
+
 
 
 class project(models.Model):
@@ -73,15 +62,4 @@ class project(models.Model):
             )
         return res
 
-    _columns = {
-        'milestones': fields.function(
-            _milestones_ids,
-            method=True,
-            type='one2many',
-            obj='project.task',
-            string='Milestones'
-        ),
-    }
-
-
-
+    milestones = fields.One2many(compute='_milestones_ids', obj='project.task', string='Milestones')

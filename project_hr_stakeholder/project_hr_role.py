@@ -19,9 +19,7 @@
 #
 ##############################################################################
 
-from openerp import tools
 from openerp import fields, models
-from openerp.tools.translate import _
 
 
 class ProjectHrRole(models.Model):

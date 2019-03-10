@@ -5,9 +5,9 @@
 #    Together as the Project Expert Team
 #    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo.tools.translate import _
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools.translate import _
 
 
 class AccountAnalyticPlanVersion(models.Model):

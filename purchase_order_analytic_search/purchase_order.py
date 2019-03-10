@@ -75,14 +75,5 @@ class purchase_order(models.Model):
             res.append(('id', 'in', order_ids))
         return res
 
-    _columns = {
-        'account_analytic_ids': fields.function(_get_analytic_accounts,
-                                                type='many2many',
-                                                string='Analytic Account',
-                                                method=True,
-                                                fnct_search=_search_analytic_accounts,
-                                                readonly=True),
-
-    }
-
-purchase_order()
+    account_analytic_ids = fields.Many2many(compute='_get_analytic_accounts', string='Analytic Account',
+                                            fnct_search=_search_analytic_accounts, readonly=True)

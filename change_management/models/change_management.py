@@ -2,10 +2,11 @@
 # Copyright 2017 Matmoz d.o.o. (<http://www.matmoz.si>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models, tools, _
-from odoo.tools.safe_eval import safe_eval
-from odoo.exceptions import AccessError
 import logging
+
+from odoo import api, fields, models, tools, _
+from odoo.exceptions import AccessError
+from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
 

@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
 from openerp import tools
+from openerp.osv import fields, orm
 
 
 class Task(orm.Model):
@@ -93,33 +93,30 @@ class Task(orm.Model):
 
         return dict(res)
 
-    _columns = {
-        'predecessor_ids_str': fields.function(
-            _predecessor_ids_calc,
-            method=True, type='char',
-            string='Predecessor tasks',
-            size=20, help='Predecessor tasks ids',
-            # store={
-            #     'project.task': (
-            #         get_related_tasks,
-            #         ['parent_ids','child_ids'], 10
-            #     ),
-            # }
-            ),
-        'predecessor_names_str': fields.function(
-            _predecessor_names_calc,
-            method=True, type='char',
-            string='Predecessor tasks',
-            size=512, help='Predecessor tasks ids',
-            # store={
-            #     'project.task': (
-            #         get_related_tasks,
-            #         ['parent_ids','child_ids'], 10
-            #     ),
-            # }
-            ),
+    predecessor_ids_str = fields.Char(
+        compute='_predecessor_ids_calc',
+        string='Predecessor tasks',
+        size=20, help='Predecessor tasks ids',
+        # store={
+        #     'project.task': (
+        #         get_related_tasks,
+        #         ['parent_ids','child_ids'], 10
+        #     ),
+        # }
+    )
+    predecessor_names_str = fields.Char(
+        compute='_predecessor_names_calc',
+        string='Predecessor tasks',
+        size=512, help='Predecessor tasks ids',
+        # store={
+        #     'project.task': (
+        #         get_related_tasks,
+        #         ['parent_ids','child_ids'], 10
+        #     ),
+        # }
+    )
 
-        }
+
 
     def do_link_predecessors(
         self,  task_id, link_predecessors_data=None, context=None

@@ -22,7 +22,6 @@
 
 from openerp import tools
 from openerp.osv import fields, orm
-from openerp.tools.translate import _
 
 
 class ProjectHrStakeholder(orm.Model):
@@ -78,66 +77,30 @@ class ProjectHrStakeholder(orm.Model):
 
         return dict(res)
 
-    _columns = {
-
-        'name': fields.char(
-            'Description',
-            required=False,
-            size=64
-        ),
-        'partner_id': fields.many2one(
-            'res.partner',
-            'Partner',
-            required=True
-        ),
-        'project_id': fields.many2one(
-            'project.project',
-            'Project',
-            ondelete='cascade'
-        ),
-        'role_ids': fields.many2many(
-            'project.hr.role',
-            'stakeholder_role_rel',
-            'stakeholder_id',
-            'role_id',
-            'Roles',
+    name = fields.Char('Description', required=False, size=64)
+    partner_id = fields.Many2one('res.partner', 'Partner', required=True)
+    project_id = fields.Many2one('project.project', 'Project', ondelete='cascade')
+    role_ids = fields.Many2many('project.hr.role', 'stakeholder_role_rel', 'stakeholder_id', 'role_id', 'Roles',
             help="The assignment of the roles and responsibilities determines "
                  "what actions the project manager, project team member, or "
                  "individual contributor will have in the project. Roles and "
                  "responsibilities generally support the project scope since "
                  "this is the required work for the project."
         ),
-        'responsibility_ids': fields.many2many(
-            'project.hr.responsibility',
-            'stakeholder_responsibility_rel',
-            'stakeholder_id',
-            'responsibility_id',
-            'Responsibilities',
-            help="The assignment of the roles and responsibilities determines "
+    responsibility_ids = fields.Many2many('project.hr.responsibility', 'stakeholder_responsibility_rel',
+                                          'stakeholder_id', 'responsibility_id', 'Responsibilities',
+                                          help="The assignment of the roles and responsibilities determines "
                  "what actions the project manager, project team member, or "
                  "individual contributor will have in the project. Roles and "
                  "responsibilities generally support the project scope since "
                  "this is the required work for the project."
-        ),
-        'roles_name_str': fields.function(
-            _roles_name_calc,
-            method=True,
-            type='text',
-            string='Roles',
-            help='Project Stakeholder roles'
-        ),
-        'responsibilities_name_str': fields.function(
-            _responsibilities_name_calc,
-            method=True,
-            type='text',
-            string='Responsibilities',
-            help='Project Stakeholder responsibilities'
-        ),
+                                          ),
+    roles_name_str = fields.Text(compute='_roles_name_calc', string='Roles', help='Project Stakeholder roles')
+    responsibilities_name_str = fields.Text(compute='_responsibilities_name_calc', string='Responsibilities',
+                                            help='Project Stakeholder responsibilities')
 
-        'influence': fields.text(
-            'Influence'
-        ),
-    }
+    influence = fields.Text('Influence')
+
 
     def name_get(self,  ids, context=None):
         if context is None:

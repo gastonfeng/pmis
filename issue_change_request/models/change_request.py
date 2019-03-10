@@ -12,14 +12,10 @@ class IssuePartnerBinding(osv.osv_memory):
     """
     _name = 'issue.partner.binding'
     _description = 'Handle partner binding or generation in Issue wizards.'
-    _columns = {
-        'action': fields.selection([
-                ('exist', 'Link to an existing customer'),
-                ('create', 'Create a new customer'),
-                ('nothing', 'Do not link to a customer')
-            ], 'Related Customer', required=True),
-        'partner_id': fields.many2one('res.partner', 'Customer'),
-    }
+    action = fields.Selection([('exist', 'Link to an existing customer'), ('create', 'Create a new customer'),
+                               ('nothing', 'Do not link to a customer')], 'Related Customer', required=True)
+    partner_id = fields.Many2one('res.partner', 'Customer')
+
 
     def _find_matching_partner(self,  context=None):
         """
@@ -100,15 +96,10 @@ class Issue2ChangeWizard(osv.TransientModel):
     _name = "project.issue2cr.wizard"
     _inherit = 'issue.partner.binding'
 
-    _columns = {
-        "issue_id": fields.many2one(
-            "project.issue", "Issue"
-        ),
-        # "project_id": fields.many2one("project.project", "Project"),
-        "change_category_id": fields.many2one(
-            "change.management.category", "Change Category"
-        ),
-    }
+    issue_id = fields.Many2one("project.issue", "Issue")
+    # "project_id": fields.many2one("project.project", "Project")
+    change_category_id = fields.Many2one("change.management.category", "Change Category")
+
 
     _defaults = {
         "issue_id": lambda self,  context=None: context.get(
