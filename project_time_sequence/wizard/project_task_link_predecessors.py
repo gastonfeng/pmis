@@ -30,9 +30,15 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
 
     predecessor_ids_str = fields.Char(
             'Predecessors',
+<<<<<<< HEAD
+            size=64, required=False, index=True,
+            help='List of predecessor task id''s separated by comma'),
+    }
+=======
         size=64, required=False, index=True,
         help='List of predecessor task id''s separated by comma')
 
+>>>>>>> github/11.0
 
     def default_get(self,  fields, context=None):
         """
