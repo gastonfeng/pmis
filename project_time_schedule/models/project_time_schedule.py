@@ -38,13 +38,13 @@ class task(models.Model):
     _description = "Activity"
 
     duration = fields.Integer('Activity duration', help='Duration in calendar hours')
-    date_early_start = fields.Datetime('Early Start Date', select=True)
-    date_early_finish = fields.Datetime('Early Finish Date', select=True)
-    date_late_start = fields.Datetime('Late Start Date', select=True)
-    date_late_finish = fields.Datetime('Late Finish Date', select=True)
+    date_early_start = fields.Datetime('Early Start Date', index=True)
+    date_early_finish = fields.Datetime('Early Finish Date', index=True)
+    date_late_start = fields.Datetime('Late Start Date', index=True)
+    date_late_finish = fields.Datetime('Late Finish Date', index=True)
     is_critical_path = fields.Boolean('Critical Path')
-    date_earliest_start = fields.Datetime('Earliest Start Date', select=True)
-    date_latest_finish = fields.Datetime('Latest Finish Date', select=True)
+    date_earliest_start = fields.Datetime('Earliest Start Date', index=True)
+    date_latest_finish = fields.Datetime('Latest Finish Date', index=True)
     total_float = fields.Integer('Total float',
                                  help='''Number of hours that the activity can be delayed without delaying the project.''')
     free_float = fields.Integer('Free float',

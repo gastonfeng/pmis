@@ -31,7 +31,7 @@ class ProjectTaskLinkPredecessorsStr(osv.osv_memory):
     _columns = {
         'predecessor_ids_str': fields.char(
             'Predecessors',
-            size=64, required=False, select=True,
+            size=64, required=False, index=True,
             help='List of predecessor task id''s separated by comma'),
     }
 
