@@ -96,15 +96,15 @@ class Issue2ChangeWizard(osv.TransientModel):
     _name = "project.issue2cr.wizard"
     _inherit = 'issue.partner.binding'
 
-    issue_id = fields.Many2one("project.issue", "Issue")
+    issue_id = fields.Many2one("project.issue", "Issue",default=lambda self,  context=None: context.get( 'active_id'))
     # "project_id": fields.many2one("project.project", "Project")
     change_category_id = fields.Many2one("change.management.category", "Change Category")
 
 
-    _defaults = {
-        "issue_id": lambda self,  context=None: context.get(
-            'active_id')
-    }
+    # _defaults = {
+    #     "issue_id": lambda self,  context=None: context.get(
+    #         'active_id')
+    # }
 
     def action_issue_to_change_request(self,  ids, context=None):
         # get the wizards and models

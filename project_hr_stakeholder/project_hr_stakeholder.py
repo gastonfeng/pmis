@@ -23,6 +23,8 @@
 from openerp import tools
 from openerp.osv import fields, orm
 
+from odoo import api
+
 
 class ProjectHrStakeholder(orm.Model):
 
@@ -101,14 +103,10 @@ class ProjectHrStakeholder(orm.Model):
 
     influence = fields.Text('Influence')
 
-
-    def name_get(self,  ids, context=None):
-        if context is None:
-            context = {}
-        if not ids:
-            return []
+    @api.multi
+    def name_get(self):
         res = []
-        for stakeholder in self.browse( ids, context=context):
+        for stakeholder in self:
             stakeholder_name = ""
             if stakeholder.partner_id:
                 stakeholder_name = stakeholder.partner_id.name

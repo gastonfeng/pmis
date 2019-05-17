@@ -24,14 +24,14 @@ from openerp.osv import orm, fields
 class EventFromTask(orm.TransientModel):
     _name = 'project.task.create.event'
 
-    date = fields.Datetime('Date')
-    duration = fields.Float('Duration')
+    date = fields.Datetime('Date',default=datetime.strftime(datetime.now(), '%Y-%m-%d 08:00:00'),)
+    duration = fields.Float('Duration',default=4.0)
     type = fields.Many2one('event.type', 'Event Type')
 
-    _defaults = {
-        'date': datetime.strftime(datetime.now(), '%Y-%m-%d 08:00:00'),
-        'duration': 4.0,
-    }
+    # _defaults = {
+    #     'date': datetime.strftime(datetime.now(), '%Y-%m-%d 08:00:00'),
+    #     'duration': 4.0,
+    # }
 
     def action_event(self,  ids, context=None):
         if context is None:
