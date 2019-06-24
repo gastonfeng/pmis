@@ -24,7 +24,7 @@
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2" />
             <field name="arch" type="xml">
-                <xpath expr="//div[@class='oe_right']" position="attributes">
+                <xpath expr="//div[hasclass('oe_right')]" position="attributes">
                     <attribute name="class">oe_right oe_button_box
                     </attribute>
                     <attribute name="name">buttons</attribute>

@@ -36,8 +36,8 @@
                 <field name="date_tz" position="after">
                     <field name="project_id" />
                 </field>
-                <xpath expr="//div[@class='oe_right oe_button_box']"
-                    position="inside">
+                <xpath expr="//div[hasclass('oe_right', 'oe_button_box')]"
+                       position="inside">
                     <button class="oe_inline oe_stat_button oe_right"
                         type="object" name="agenda_description" icon="fa-pencil-square-o"
                         attrs="{'invisible':['|',['project_id','=',False],['task_count','&lt;=',0]]}">
